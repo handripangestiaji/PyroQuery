@@ -38,6 +38,19 @@ class Plugin_query extends Plugin
 		if ($this->attribute('where')) {
 			$where = ' WHERE '.$this->attribute('where');
 		}
+		
+		
+		/*
+		* Usage:
+		* {{ query:run select="*" from="my_table" join="LEFT JOIN `default_files` ON `default_my_table`.`image` = `default_files`.`id`" where="column = 2" }}
+	 	*	 {{ field_name }}
+		* {{ /query:run }}
+		*/
+		
+		$join = '';
+		if ($this->attribute('join')) {
+			$join = ' '.$this->attribute('join').' ';
+		}
 
 		$limit = ($this->attribute('limit')) ? $this->attribute('limit') : null;
 		$offset = $this->attribute('offset', 0);
@@ -58,7 +71,9 @@ class Plugin_query extends Plugin
 		$query = "
 		SELECT $select
 		FROM $from
+		$join
 		$where
+		$orderBy
 		$limitStatement
 		";
 
